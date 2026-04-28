@@ -23,12 +23,14 @@ usage() {
   } >&2
 }
 
+die() {
+  echo "quickshare: $1" >&2
+  exit 1
+}
+
 require_env() {
   local name="$1"
-  if [[ -z "${!name:-}" ]]; then
-    echo "quickshare: $name is not set" >&2
-    exit 1
-  fi
+  [[ -n "${!name:-}" ]] || die "$name is not set"
 }
 
 cmd_add() {
@@ -37,14 +39,8 @@ cmd_add() {
     usage
     exit 2
   fi
-  if [[ ! -f "$file" ]]; then
-    echo "quickshare: file not found: $file" >&2
-    exit 1
-  fi
-  if [[ "$file" != *.html ]]; then
-    echo "quickshare: only .html files are supported" >&2
-    exit 1
-  fi
+  [[ -f "$file" ]] || die "file not found: $file"
+  [[ "$file" == *.html ]] || die "only .html files are supported"
 
   local entry
   for entry in "${required_envs[@]}"; do
