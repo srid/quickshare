@@ -20,6 +20,8 @@ usage() {
     for entry in "${required_envs[@]}"; do
       printf '  %-24s %s\n' "${entry%%|*}" "${entry#*|}"
     done
+    echo
+    echo "Authentication: run 'wrangler login' once to cache an OAuth token on disk."
   } >&2
 }
 
