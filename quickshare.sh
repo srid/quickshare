@@ -1,19 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Single source of truth: NAME|description for each required env var.
+required_envs=(
+  'CLOUDFLARE_API_TOKEN|API token with "R2 Storage: Edit" permission.'
+  'CLOUDFLARE_ACCOUNT_ID|Cloudflare account ID owning the bucket.'
+  'QUICKSHARE_R2_BUCKET|R2 bucket name.'
+  'QUICKSHARE_PUBLIC_URL|Public base URL bound to the bucket (e.g. https://share.srid.ca).'
+)
+
 usage() {
-  cat >&2 <<'EOF'
-Usage: quickshare add <file.html>
-
-Upload an HTML file to a Cloudflare R2 bucket and print its public URL.
-
-Required environment variables:
-  CLOUDFLARE_API_TOKEN     API token with "R2 Storage: Edit" permission.
-  CLOUDFLARE_ACCOUNT_ID    Cloudflare account ID owning the bucket.
-  QUICKSHARE_R2_BUCKET     R2 bucket name.
-  QUICKSHARE_PUBLIC_URL    Public base URL bound to the bucket
-                           (e.g. https://share.srid.ca).
-EOF
+  {
+    echo "Usage: quickshare add <file.html>"
+    echo
+    echo "Upload an HTML file to a Cloudflare R2 bucket and print its public URL."
+    echo
+    echo "Required environment variables:"
+    local entry
+    for entry in "${required_envs[@]}"; do
+      printf '  %-24s %s\n' "${entry%%|*}" "${entry#*|}"
+    done
+  } >&2
 }
 
 require_env() {
@@ -39,10 +46,10 @@ cmd_add() {
     exit 1
   fi
 
-  require_env CLOUDFLARE_API_TOKEN
-  require_env CLOUDFLARE_ACCOUNT_ID
-  require_env QUICKSHARE_R2_BUCKET
-  require_env QUICKSHARE_PUBLIC_URL
+  local entry
+  for entry in "${required_envs[@]}"; do
+    require_env "${entry%%|*}"
+  done
 
   local name
   name="$(basename "$file" .html)"
