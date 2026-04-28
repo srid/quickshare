@@ -9,20 +9,20 @@ https://share.example.com/foo
 
 ## Setup
 
-You need:
-
 1. An R2 bucket with a public custom domain (e.g. `share.example.com`).
    See [R2 → Public buckets](https://developers.cloudflare.com/r2/buckets/public-buckets/).
-2. A Cloudflare API token scoped to **R2 Storage: Edit** for that bucket.
+2. Authenticate `wrangler` once — opens a browser OAuth flow and caches a token on disk:
 
-Set these environment variables (e.g. in your shell profile):
+   ```sh
+   wrangler login
+   ```
 
-| Variable                 | Example                       |
-| ------------------------ | ----------------------------- |
-| `CLOUDFLARE_API_TOKEN`   | `xxxxxxxxxxxxxxxxxxxxxxxxx`   |
-| `CLOUDFLARE_ACCOUNT_ID`  | `abc123...`                   |
-| `QUICKSHARE_R2_BUCKET`   | `share`                       |
-| `QUICKSHARE_PUBLIC_URL`  | `https://share.example.com`   |
+3. Set the bucket and public URL in your shell profile:
+
+   | Variable                 | Example                       |
+   | ------------------------ | ----------------------------- |
+   | `QUICKSHARE_R2_BUCKET`   | `share`                       |
+   | `QUICKSHARE_PUBLIC_URL`  | `https://share.example.com`   |
 
 ## Usage
 

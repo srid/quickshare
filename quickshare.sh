@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Single source of truth: NAME|description for each required env var.
+# Cloudflare auth is handled by `wrangler login` (OAuth token cached on disk),
+# so no CLOUDFLARE_* vars are needed here.
 required_envs=(
-  'CLOUDFLARE_API_TOKEN|API token with "R2 Storage: Edit" permission.'
-  'CLOUDFLARE_ACCOUNT_ID|Cloudflare account ID owning the bucket.'
   'QUICKSHARE_R2_BUCKET|R2 bucket name.'
   'QUICKSHARE_PUBLIC_URL|Public base URL bound to the bucket (e.g. https://share.srid.ca).'
 )
